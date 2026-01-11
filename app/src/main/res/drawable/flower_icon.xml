@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Center circle -->
+    <path
+        android:fillColor="#FFD700"
+        android:pathData="M54,54m-8,0a8,8 0,1,1 16,0a8,8 0,1,1 -16,0" />
+
+    <!-- Top petal -->
+    <path
+        android:fillColor="#FF69B4"
+        android:pathData="M54,20C48,20 44,28 44,34C44,40 48,46 54,46C60,46 64,40 64,34C64,28 60,20 54,20Z" />
+
+    <!-- Bottom petal -->
+    <path
+        android:fillColor="#FF69B4"
+        android:pathData="M54,62C48,62 44,68 44,74C44,80 48,88 54,88C60,88 64,80 64,74C64,68 60,62 54,62Z" />
+
+    <!-- Left petal -->
+    <path
+        android:fillColor="#FF1493"
+        android:pathData="M20,54C20,48 28,44 34,44C40,44 46,48 46,54C46,60 40,64 34,64C28,64 20,60 20,54Z" />
+
+    <!-- Right petal -->
+    <path
+        android:fillColor="#FF1493"
+        android:pathData="M62,54C62,48 68,44 74,44C80,44 88,48 88,54C88,60 80,64 74,64C68,64 62,60 62,54Z" />
+
+    <!-- Top-left petal -->
+    <path
+        android:fillColor="#FFB6C1"
+        android:pathData="M30,30C26,26 28,18 34,16C40,14 46,18 48,24C50,30 46,36 40,38C34,40 34,34 30,30Z" />
+
+    <!-- Top-right petal -->
+    <path
+        android:fillColor="#FFB6C1"
+        android:pathData="M78,30C82,26 80,18 74,16C68,14 62,18 60,24C58,30 62,36 68,38C74,40 74,34 78,30Z" />
+
+    <!-- Bottom-left petal -->
+    <path
+        android:fillColor="#FFB6C1"
+        android:pathData="M30,78C26,82 28,90 34,92C40,94 46,90 48,84C50,78 46,72 40,70C34,68 34,74 30,78Z" />
+
+    <!-- Bottom-right petal -->
+    <path
+        android:fillColor="#FFB6C1"
+        android:pathData="M78,78C82,82 80,90 74,92C68,94 62,90 60,84C58,78 62,72 68,70C74,68 74,74 78,78Z" />
+
+</vector>
