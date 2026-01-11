@@ -17,9 +17,10 @@
 
 ### Требования
 
-- Android Studio Arctic Fox или новее
-- Android SDK 34
+- Android Studio Hedgehog или новее
+- Android SDK 35 (Android 15)
 - Minimum SDK: 26 (Android 8.0)
+- Оптимизировано для Google Pixel 9 (Tensor G4)
 
 ### Инструкции
 
