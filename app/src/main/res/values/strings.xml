@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Daily Counter</string>
-    <string name="widget_description">Daily counter with flower icon</string>
-    <string name="flower_icon_desc">Flower icon</string>
+    <string name="app_name">Dab Tracker</string>
+    <string name="widget_name">Dab Tracker Widget</string>
+    <string name="widget_description">Shows active extract and quick log button</string>
 </resources>
