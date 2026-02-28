@@ -1,5 +1,6 @@
 package com.dabtracker.app.presentation.screens.extract
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -9,11 +10,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
@@ -25,11 +29,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -45,11 +52,32 @@ fun AddEditExtractScreen(
     extractId: Long?,
     onNavigateBack: () -> Unit,
     viewModel: AddEditExtractViewModel = viewModel(
-        factory = AddEditExtractViewModel.Factory(app.extractRepository, extractId)
+        factory = AddEditExtractViewModel.Factory(
+            app.extractRepository, app.customCategoryManager, extractId
+        )
     )
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val customCategories by viewModel.customCategories.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
+    var categoryToDelete by remember { mutableStateOf<String?>(null) }
+
+    categoryToDelete?.let { name ->
+        AlertDialog(
+            onDismissRequest = { categoryToDelete = null },
+            title = { Text("Delete Category") },
+            text = { Text("Delete custom category \"$name\"? Existing extracts will keep their category.") },
+            confirmButton = {
+                TextButton(onClick = {
+                    viewModel.deleteCustomCategory(name)
+                    categoryToDelete = null
+                }) { Text("Delete") }
+            },
+            dismissButton = {
+                TextButton(onClick = { categoryToDelete = null }) { Text("Cancel") }
+            }
+        )
+    }
 
     LaunchedEffect(state.isSaved) {
         if (state.isSaved) onNavigateBack()
@@ -98,19 +126,37 @@ fun AddEditExtractScreen(
             ) {
                 ExtractCategory.defaults.forEach { cat ->
                     FilterChip(
-                        selected = state.category == cat,
+                        selected = state.category == cat && state.selectedCustomCategory == null,
                         onClick = { viewModel.updateCategory(cat) },
                         label = { Text(cat.displayName) }
                     )
                 }
+
+                customCategories.forEach { customName ->
+                    FilterChip(
+                        selected = state.selectedCustomCategory == customName,
+                        onClick = { viewModel.selectCustomCategory(customName) },
+                        label = { Text(customName) },
+                        trailingIcon = {
+                            Icon(
+                                Icons.Default.Close,
+                                contentDescription = "Delete $customName",
+                                modifier = Modifier
+                                    .size(16.dp)
+                                    .clickable { categoryToDelete = customName }
+                            )
+                        }
+                    )
+                }
+
                 FilterChip(
-                    selected = state.category == ExtractCategory.CUSTOM,
+                    selected = state.category == ExtractCategory.CUSTOM && state.selectedCustomCategory == null,
                     onClick = { viewModel.updateCategory(ExtractCategory.CUSTOM) },
-                    label = { Text("Custom") }
+                    label = { Text("+ New") }
                 )
             }
 
-            if (state.category == ExtractCategory.CUSTOM) {
+            if (state.category == ExtractCategory.CUSTOM && state.selectedCustomCategory == null) {
                 OutlinedTextField(
                     value = state.customCategory,
                     onValueChange = viewModel::updateCustomCategory,

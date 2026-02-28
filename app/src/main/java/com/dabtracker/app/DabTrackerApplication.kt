@@ -3,6 +3,7 @@ package com.dabtracker.app
 import android.app.Application
 import com.dabtracker.app.data.export.ExportImportManager
 import com.dabtracker.app.data.local.AppDatabase
+import com.dabtracker.app.data.local.CustomCategoryManager
 import com.dabtracker.app.data.repository.DeviceRepositoryImpl
 import com.dabtracker.app.data.repository.ExtractRepositoryImpl
 import com.dabtracker.app.data.repository.SessionRepositoryImpl
@@ -24,6 +25,10 @@ class DabTrackerApplication : Application() {
 
     val deviceRepository: DeviceRepository by lazy {
         DeviceRepositoryImpl(database.deviceDao())
+    }
+
+    val customCategoryManager: CustomCategoryManager by lazy {
+        CustomCategoryManager(this)
     }
 
     val exportImportManager: ExportImportManager by lazy {

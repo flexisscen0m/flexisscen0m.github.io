@@ -36,14 +36,21 @@ import java.util.concurrent.TimeUnit
 class DabTrackerWidget : GlanceAppWidget() {
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        val db = AppDatabase.getInstance(context)
+        var activeExtract: ExtractWithRemaining? = null
+        var lastSession: SessionEntity? = null
+        var lastExtractName: String? = null
 
-        val extracts = db.extractDao().getAllWithRemaining().first()
-        val activeExtract = extracts.maxByOrNull { it.remainingWeightGrams }
-        val lastSession = db.sessionDao().getLastSession().first()
-        val lastExtractName = if (lastSession != null) {
-            extracts.find { it.id == lastSession.extractId }?.name ?: "Unknown"
-        } else null
+        try {
+            val db = AppDatabase.getInstance(context)
+            val extracts = db.extractDao().getAllWithRemaining().first()
+            activeExtract = extracts.maxByOrNull { it.remainingWeightGrams }
+            lastSession = db.sessionDao().getLastSession().first()
+            lastExtractName = if (lastSession != null) {
+                extracts.find { it.id == lastSession.extractId }?.name ?: "Unknown"
+            } else null
+        } catch (_: Exception) {
+            // Gracefully handle DB errors to prevent widget crash loop
+        }
 
         provideContent {
             GlanceTheme {
